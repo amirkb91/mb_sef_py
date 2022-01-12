@@ -6,6 +6,7 @@ from mb_sef_py.math import Frame, UnitQuaternion
 from mb_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
 from mb_sef_py.utils import Logger, SensorNode, LogNodalFields
 
+
 # External Loading
 def loading(t):
     force = 0
@@ -13,6 +14,7 @@ def loading(t):
     loads = np.zeros((6, ))
     loads[2] = force * np.sin(freq * t)
     return loads
+
 
 # Beam Properties
 E, G, rho = 2.1e11, 8.e10, 7850
@@ -49,37 +51,27 @@ model.add_element(cl_props, node_0)
 number_of_element = 30
 discretize_beam(model, node_0, node_1, number_of_element, beam_props)
 
-# Initial velocity (working)
-#node_1.set_initial_velocity(np.array([0., 0., .5, 0., 0., 0.]))
+# Initial velocity
+# node_1.set_initial_velocity(np.array([0., 0., .5, 0., 0., 0.]))
 
-# Initial deforation: small Z deflection on node_1 (tip)
-# get frame_0 and change the Z coordinate and set as new frame_0
-frame_0 = node_1.frame_0
-frame_0.x[2] = 0.0001
-node_1.set_frame_0(frame_0)
+# Initial deformation
+# tip node only
+frame_0x = np.copy(node_1.frame_0.x)
+frame_0x[2] = 1e-5
+Frame_0 = Frame(x=frame_0x)
+node_1.set_frame_0(Frame_0)
 
-# Other methods for setting initial deformation which are not working
-# --- Gives NaN
-# vec_0 = node_1.frame_ref.q.rotate_vector(np.array([0., 0., 0.001]))
-# Frame_0 = Frame(x=vec_0)
-# node_1.set_frame_0(Frame_0)
-
-# --- Gives NaN
-# Frame_0 = Frame(x=np.array([1., 0., .0001])) * node_1.frame_ref
-# node_1.set_frame_0(Frame_0)
-
-# --- Beam stays undeformed and doesn't move upon release
-# start from solution x0
+# --- Read Initial deformation from File
 # x0_sol = []
 # with open('x0.dat') as x0_file:
 #     for line in x0_file:
 #         x0_sol.append(float(line))
 #
-# for i in range(number_of_element+1):
-#     vec_0 = model.get_node(0,i).frame_0.x
-#     vec_0[2] = x0_sol[i] #update z coordinate to existing solution
-#     Frame_0 = Frame(x=vec_0) #create frame with new vec_0
-#     model.get_node(0,i).set_frame_0(Frame_0)
+# for i in range(number_of_element + 1):
+#     vec_0 = np.copy(model.get_node(0, i).frame_0.x)
+#     vec_0[2] = x0_sol[i]  # update z coordinate to existing solution
+#     Frame_0 = Frame(x=vec_0)  # create frame with new vec_0
+#     model.get_node(0, i).set_frame_0(Frame_0)
 
 # External Force
 ef_node = 6
@@ -97,15 +89,9 @@ for i in range(len(log_nodes)):
 
 # Time integration
 time_integration_parameters = TimeIntegrationParameters()
-time_integration_parameters.rho = 1
-time_integration_parameters.T = .5
+time_integration_parameters.rho = .95
+time_integration_parameters.T = 1.0
 time_integration_parameters.h = 1.e-3
 time_integration_parameters.tol_res_forces = 1.e-5
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
 integrator.solve()
-
-# coords = []
-# for i in range(0,number_of_element+1):
-#     pp = model.get_node(0,i)
-#     x = pp.frame_0.x
-#     coords.append(x)

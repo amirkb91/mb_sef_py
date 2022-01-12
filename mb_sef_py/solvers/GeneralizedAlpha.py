@@ -42,12 +42,12 @@ class GeneralizedAlpha:
         assembly_coefs['coef_m'] = assembly_coefs['coef_b'] = 1.
         self.model.assemble_res_st(assembly_coefs, self.tip)
         st = self.model.build_iteration_matrix_from_sparse_representation()
-        corr = - spsolve(st, self.model.res)
+        corr = - spsolve(st, self.model.res) * 0
         self.model.v_dot = corr[:n_motion]
         a_n = corr[:n_motion]
         self.model.inc[n_motion:] = corr[n_motion:]
         self.model.kinematic_update([TypeOfVariables.LAGRANGE_MULTIPLIER])
-        #
+
 
         if self.logger:
             self.logger.log_step(0)
