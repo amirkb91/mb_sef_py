@@ -5,5 +5,6 @@ mb_sef_py.egg-info/
 *.h5
 .idea/
 *__pycache__/
+*.dat
 
 
