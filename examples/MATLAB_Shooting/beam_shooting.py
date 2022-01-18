@@ -63,7 +63,7 @@ for i in range(number_of_element + 1):
 
 # Log
 logger = Logger('beam_shooting', periodicity=1)
-log_nodes = list(range(1, number_of_element+1))
+log_nodes = list(range(0, number_of_element+1))
 for i in range(len(log_nodes)):
     log_node = model.get_node(0, log_nodes[i])
     logger.add_sensor(SensorNode(log_node, LogNodalFields.MOTION))
