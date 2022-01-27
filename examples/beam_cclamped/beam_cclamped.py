@@ -32,6 +32,8 @@ model = Model()
 p0 = np.array([0., 0., 0.])
 p1 = np.array([1., 0., 0.])
 
+# The following s_0 n_0 b_0 gives a UnitQuaternion with e0=1 and e=[0,0,0]
+# which is the default values from the class constructor
 s_0 = np.array([1., 0., 0.])
 n_0 = np.array([0., 1., 0.])
 b_0 = np.array([0., 0., 1.])
@@ -90,7 +92,7 @@ for i in range(len(log_nodes)):
 # Time integration
 time_integration_parameters = TimeIntegrationParameters()
 time_integration_parameters.rho = .95
-time_integration_parameters.T = 1.0
+time_integration_parameters.T = .01
 time_integration_parameters.h = 1.e-3
 time_integration_parameters.tol_res_forces = 1.e-5
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
