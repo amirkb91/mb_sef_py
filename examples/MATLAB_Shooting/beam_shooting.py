@@ -35,7 +35,7 @@ model.add_element(cl_props, node_0)
 model.add_element(cl_props, node_1)
 
 # Mesh
-number_of_element = 10
+number_of_element = 20
 discretize_beam(model, node_0, node_1, number_of_element, beam_props)
 
 # List of node coordinates
@@ -87,7 +87,7 @@ time_integration_parameters = TimeIntegrationParameters()
 time_integration_parameters.rho = 1.0  # rho = 1 ensures no damping
 time_integration_parameters.T = T0
 time_integration_parameters.h = 2.e-4
-time_integration_parameters.tol_res_forces = 1.e-5
+time_integration_parameters.tol_res_forces = 1.e-6
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
 integrator.solve()
 
