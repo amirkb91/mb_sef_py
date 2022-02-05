@@ -34,7 +34,7 @@ class Logger:
         for sensor in self.list_sensors:
             group_name = sensor.get_group_name()
             name, size = sensor.get_dataset_name(), sensor.get_dataset_number_of_rows()
-            sensor.dataset_id = self.file_id.create_dataset(group_name + '/' + name, (size, 0), maxshape=(size, None))
+            sensor.dataset_id = self.file_id.create_dataset(group_name + '/' + name, (size, 0), dtype='f8', maxshape=(size, None))
 
     def log_step(self, step_number):
         if step_number % self.periodicity == 0:
