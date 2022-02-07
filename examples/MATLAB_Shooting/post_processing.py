@@ -39,6 +39,7 @@ def postprocess(file_name, node_xyz):
     v_T = np.stack((v_xyz[0, :, -1], v_xyz[2, :, -1], v_theta_xyz[1, :, -1]), axis=1).flatten()
     xT = np.concatenate((xz_T, v_T), axis=0)
 
-    np.savetxt('xT.dat', xT, fmt='%.18f')
+    xT_name = 'IO/xT_' + file_name.split('IO/lg_')[1] + '.dat'
+    np.savetxt(xT_name, xT, fmt='%.18f')
     print('Post-Processing Finished')
 
