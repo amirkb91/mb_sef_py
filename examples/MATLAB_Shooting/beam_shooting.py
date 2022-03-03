@@ -88,10 +88,10 @@ for i in log_nodes:
 
 # Time integration
 time_integration_parameters = TimeIntegrationParameters()
-time_integration_parameters.rho = 0.99  # rho = 1 ensures no damping, try 0.99 due to BC.
+time_integration_parameters.rho = .99
 time_integration_parameters.T = T
 time_integration_parameters.h = T/31
-time_integration_parameters.tol_res_forces = 1.e-5
+time_integration_parameters.tol_res_forces = 1.e-6
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
 integrator.solve()
 
