@@ -77,8 +77,8 @@ node_xyz = np.zeros([number_of_element + 1, 3])
 for i in range(number_of_element+1):
     node_xyz[i, :] = np.copy(model.get_node(0, i).frame_0.x)
 
-# Log
-logfile = 'IO/lg' + x0_name.split('x0')[1].strip('.dat')
+# Log. Make sure we use removesuffix and not strip
+logfile = 'IO/lg' + x0_name.split('x0')[1].removesuffix('.dat')
 logger = Logger(logfile, periodicity=1)
 log_nodes = list(range(2, number_of_element+1))
 for i in log_nodes:
@@ -90,7 +90,7 @@ for i in log_nodes:
 time_integration_parameters = TimeIntegrationParameters()
 time_integration_parameters.rho = .99
 time_integration_parameters.T = T
-time_integration_parameters.h = T/31
+time_integration_parameters.h = T/51
 time_integration_parameters.tol_res_forces = 1.e-6
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
 integrator.solve()
